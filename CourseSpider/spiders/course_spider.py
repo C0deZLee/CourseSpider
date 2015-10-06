@@ -23,14 +23,14 @@ class ProductSpider(BaseSpider):
 
     def parse(self, response):
 
-        i = 180
+        i = 1
 
         while i < 300:
             self.driver.get(response.url)
             semester_select = self.driver.find_element_by_name("Semester")
             allOptions1 = semester_select.find_elements_by_tag_name("option")
             for option1 in allOptions1:
-                if option1.get_attribute("value") == "SPRING 2016":
+                if option1.get_attribute("value") == "SUMMER 2016":
                     option1.click()
                     break
 
@@ -53,18 +53,19 @@ class ProductSpider(BaseSpider):
             submit = self.driver.find_element_by_name("search")
             submit.click()
 
-            time.sleep(3)
             self.driver.get("http://schedule.psu.edu/act_search.cfm?viewAll=Y")
 
             hxs = HtmlXPathSelector(text=self.driver.page_source)
             tables = hxs.select("//table")
             item = CourseItem()
             for table in tables:
-                classes = table.select("tbody/tr[@class='course_details even']")
+                classes = table.select("tbody/tr[@class='course_details']")
                 for Aclass in classes:
                     item['class_name'] = table.select("thead/tr/th/p[@class='course_abbrev']/text()").extract()
                     item['class_number'] = Aclass.select("td[1]/p/text()").extract()
                     item['class_time'] = Aclass.select("td[4]/p/text()").extract()
+                    item['class_section'] = Aclass.select("td[2]/p/text()").extract()
+                    item['class_prof'] = Aclass.select("td[6]/p/a/text()").extract()
                     yield item
             i = i +1
         self.driver.close()

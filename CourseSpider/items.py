@@ -13,3 +13,5 @@ class CourseItem(scrapy.Item):
     class_name = scrapy.Field()
     class_number = scrapy.Field()
     class_time = scrapy.Field()
+    class_section = scrapy.Field()
+    class_prof = scrapy.Field()
