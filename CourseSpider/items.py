@@ -15,3 +15,9 @@ class CourseItem(scrapy.Item):
     class_time = scrapy.Field()
     class_section = scrapy.Field()
     class_prof = scrapy.Field()
+    class_location = scrapy.Field()
+    class_capacity = scrapy.Field()
+    class_enrollment_number = scrapy.Field()
+    class_waitlist_capacity = scrapy.Field()
+    class_waitlist_number = scrapy.Field()
+    class_status = scrapy.Field() #Open / Wait / Closed
