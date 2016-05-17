@@ -18,7 +18,7 @@ class CourseItem(scrapy.Item):
     cls_ins1 = scrapy.Field() #check
     cls_ins2 = scrapy.Field() #check
     cls_room = scrapy.Field() #check
-    cls_credits = scrapy.Field() #check
+    cls_units = scrapy.Field() #check
     cls_capacity = scrapy.Field() #check
     cls_waitlist_capacity = scrapy.Field() #check
 
