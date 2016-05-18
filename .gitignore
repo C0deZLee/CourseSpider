@@ -1,3 +1,9 @@
 .DS_Store
 items.pyc
 course_spider.pyc
+
+CourseSpider/d
+
+*.jl
+
+*.pyc

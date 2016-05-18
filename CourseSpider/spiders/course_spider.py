@@ -28,36 +28,38 @@ class CourseSpider(BaseSpider):
         self.driver.find_element_by_xpath("//*[@id=\"main-content\"]/form/div[4]/input").click()
 
     def parse(self, response):
+        driver = self.driver
         # Login
         self.login()
         # choose location
-        for location in self.driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_LOCATION$1\"]").find_elements_by_tag_name("option"):
+        for location in driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_LOCATION$1\"]").find_elements_by_tag_name("option"):
             if location.get_attribute("value") == "UNIVPARK":
                 location.click()
                 time.sleep(2)
                 break
 
-        major_count = 1
-        major_total = len(self.driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option"))
+        major_count = 201
+        major_total = 250
+        # major_total = len(driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option"))
 
         while (major_count <= major_total):
-            self.driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option")[major_count].click()
+            driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option")[major_count].click()
             # uncheck open class only
-            self.driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SSR_OPEN_ONLY$6\"]").click()
+            driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SSR_OPEN_ONLY$6\"]").click()
             # search button
-            self.driver.find_element_by_xpath("//*[@id=\"CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\"]").click()
+            driver.find_element_by_xpath("//*[@id=\"CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\"]").click()
             # wait load
             t_end = time.time() + 15
-            while (time.time() < t_end and self.driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]') == []):
+            while (time.time() < t_end and driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]') == []):
                 pass
             time.sleep(0.1)
 
-            if self.driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]') != []:
+            if driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]') != []:
                 # init variables
                 item = CourseItem()
                 course_count = 0
 
-                hxs = Selector(text=self.driver.page_source)
+                hxs = Selector(text=driver.page_source)
 
                 nbr = hxs.xpath('//*[@id="MTG_CLASS_NBR$'+ str(course_count) +'"]')
                 sec = hxs.xpath('//*[@id="MTG_CLASSNAME$'+ str(course_count) +'"]')
@@ -81,11 +83,11 @@ class CourseSpider(BaseSpider):
                         pass
                     else:
                         # get the detail info
-                        self.driver.find_element_by_xpath('//*[@id="MTG_CLASSNAME$'+ str(course_count) +'"]').click()
-                        while (self.driver.find_elements_by_xpath('//*[@id="SSR_CLS_DTL_WRK_SSR_DESCRSHORT"]') == []):
+                        driver.find_element_by_xpath('//*[@id="MTG_CLASSNAME$'+ str(course_count) +'"]').click()
+                        while (driver.find_elements_by_xpath('//*[@id="SSR_CLS_DTL_WRK_SSR_DESCRSHORT"]') == []):
                             pass
 
-                        detail_hxc = Selector(text=self.driver.page_source)
+                        detail_hxc = Selector(text=driver.page_source)
 
                         item['cls_status'] = detail_hxc.xpath('//*[@id="SSR_CLS_DTL_WRK_SSR_DESCRSHORT"]').css('::text').extract()[0]
                         item['cls_full_name'] = detail_hxc.xpath('//*[@id="DERIVED_CLSRCH_DESCR200"]').css('::text').extract()[0]
@@ -97,17 +99,17 @@ class CourseSpider(BaseSpider):
                         item['cls_waitlist_number'] = detail_hxc.xpath('//*[@id="SSR_CLS_DTL_WRK_WAIT_TOT"]').css('::text').extract()[0]
                         yield item
                         # Return to basic info page
-                        self.driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_BACK"]').click()
+                        driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_BACK"]').click()
 
 
                     # increase
                     course_count = course_count + 1
 
                     # wait for load
-                    while(self.driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]')  == []):
+                    while(driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]')  == []):
                         pass
 
-                    hxs = Selector(text=self.driver.page_source)
+                    hxs = Selector(text=driver.page_source)
 
                     nbr = hxs.xpath('//*[@id="MTG_CLASS_NBR$'+ str(course_count) +'"]')
                     sec = hxs.xpath('//*[@id="MTG_CLASSNAME$'+ str(course_count) +'"]')
@@ -116,9 +118,9 @@ class CourseSpider(BaseSpider):
                     ins = hxs.xpath('//*[@id="MTG_INSTR$'+ str(course_count) +'"]')
 
                 # back to main page
-                self.driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]').click()
+                driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]').click()
                 major_count = major_count + 1
-                while(self.driver.find_elements_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]") == []):
+                while(driver.find_elements_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]") == []):
                     pass
 
-        self.driver.close()
+        driver.close()
