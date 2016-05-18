@@ -61,9 +61,10 @@ NEWSPIDER_MODULE = 'CourseSpider.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'CourseSpider.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'CourseSpider.pipelines.CleanUpPipeline': 100,
+   'CourseSpider.pipelines.JsonWriterPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
