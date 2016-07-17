@@ -9,19 +9,21 @@ import scrapy
 
 
 class CourseItem(scrapy.Item):
-    cls_name = scrapy.Field()
-    cls_full_name = scrapy.Field() #check
-    cls_dscr = scrapy.Field() #check
-    cls_nbr = scrapy.Field() #check
-    cls_daytime = scrapy.Field() #check
-    cls_sec = scrapy.Field() #check
-    cls_ins1 = scrapy.Field() #check
-    cls_ins2 = scrapy.Field() #check
-    cls_room = scrapy.Field() #check
-    cls_units = scrapy.Field() #check
-    cls_capacity = scrapy.Field() #check
-    cls_waitlist_capacity = scrapy.Field() #check
-
-    cls_capacity_number = scrapy.Field() #check
-    cls_waitlist_number = scrapy.Field() #check
-    cls_status = scrapy.Field() #check
+    name = scrapy.Field() #check
+    fullName = scrapy.Field() #check
+    description = scrapy.Field() #check
+    number = scrapy.Field() #check
+    time = scrapy.Field() #check
+    section = scrapy.Field() #check
+    instructor1 = scrapy.Field() #check
+    instructor2 = scrapy.Field() #check
+    room = scrapy.Field() #check
+    unit = scrapy.Field() #check
+    capacity = scrapy.Field() #check
+    waitlist = scrapy.Field() #check
+    enrolled = scrapy.Field() #check
+    waitlistEnrolled = scrapy.Field() #check
+    status = scrapy.Field() #check
+    major = scrapy.Field() #check
+    classType = scrapy.Field() 
+    notes = scrapy.Field()
