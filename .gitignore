@@ -7,3 +7,9 @@ CourseSpider/d
 *.jl
 
 *.pyc
+
+*.pyc
+
+CourseSpider/pipelines.pyc
+
+courses_data.json
