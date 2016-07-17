@@ -1,13 +1,9 @@
-.DS_Store
-items.pyc
-course_spider.pyc
-
-CourseSpider/d
-
-*.jl
-
+# compiled files
 *.pyc
 
+# json data files
 courses_data.json
+*.jl
 
-classes_up.json
+# OS X file
+.DS_Store
