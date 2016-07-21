@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+  #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os
@@ -35,8 +35,10 @@ class CourseSpider(BaseSpider):
                 location.click()
                 time.sleep(2)
                 break
+        # uncheck open class only
+        driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SSR_OPEN_ONLY$6\"]").click()
 
-        major_count = 10
+        major_count = 30
         # major_total = 300
         major_total = len(driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option"))
 
@@ -44,23 +46,21 @@ class CourseSpider(BaseSpider):
         while (major_count <= major_total):
             file = open('courses_data.json', 'r')
             driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]").find_elements_by_tag_name("option")[major_count].click()
-            # uncheck open class only
-            driver.find_element_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SSR_OPEN_ONLY$6\"]").click()
             # search button
             driver.find_element_by_xpath("//*[@id=\"CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\"]").click()
             # wait load
-            t_end = time.time() + 5
-            while ((time.time() < t_end and driver.find_elements_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]') == []) or driver.find_elements_by_xpath('//*[@id="#ICSave"]') != []):
-                time.sleep(0.2)
+            t_end = time.time() + 10
+            while (time.time() < t_end and (driver.find_elements_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]') == [] and driver.find_elements_by_xpath('//*[@id="#ICSave"]') == [])):
+                time.sleep(0.5)
             time.sleep(0.1)
 
             # more than 250
             if (driver.find_elements_by_xpath('//*[@id="#ICSave"]') != []):
                 driver.find_element_by_xpath('//*[@id="#ICSave"]').click()
                 # wait load
-                t_end = time.time() + 10
+                t_end = time.time() + 60
                 while (time.time() < t_end and driver.find_elements_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]') == []):
-                    time.sleep(0.2)
+                    time.sleep(0.5)
                 time.sleep(0.1)
 
             # init item
@@ -93,7 +93,7 @@ class CourseSpider(BaseSpider):
                         # get the detail info
                         driver.find_element_by_xpath('//*[@id="MTG_CLASSNAME$'+ str(course_count) +'"]').click()
                         while (driver.find_elements_by_xpath('//*[@id="SSR_CLS_DTL_WRK_SSR_DESCRSHORT"]') == []):
-                            time.sleep(0.2)
+                            time.sleep(0.5)
 
                         detail_hxc = Selector(text=driver.page_source)
 
@@ -117,7 +117,7 @@ class CourseSpider(BaseSpider):
                         driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_BACK"]').click()
                         # wait for load
                         while(driver.find_elements_by_xpath('//*[@id="MTG_CLASS_NBR$0"]')  == []):
-                            time.sleep(0.2)
+                            time.sleep(0.5)
 
                 # increase
                 course_count = course_count + 1
@@ -130,12 +130,15 @@ class CourseSpider(BaseSpider):
                 room = hxs.xpath('//*[@id="MTG_ROOM$'+ str(course_count) +'"]')
                 ins = hxs.xpath('//*[@id="MTG_INSTR$'+ str(course_count) +'"]')
 
+            while(driver.find_elements_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]') == []):
+                time.sleep(0.5)
             # back to main page
             driver.find_element_by_xpath('//*[@id="CLASS_SRCH_WRK2_SSR_PB_MODIFY$5$"]').click()
 
-            major_count = major_count + 1
             # wait load
             while(driver.find_elements_by_xpath("//*[@id=\"SSR_CLSRCH_WRK_SUBJECT_SRCH$2\"]") == []):
-                time.sleep(0.2)
+                time.sleep(0.5)
+            # increase
+            major_count = major_count + 1
         # close driver
         driver.close()
