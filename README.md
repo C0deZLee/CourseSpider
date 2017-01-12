@@ -1,5 +1,5 @@
 # CourseSpider
-A spider for schedule.psu.edu
+A spider for lionpath
 Based on scrapy
 
 ## For debug
