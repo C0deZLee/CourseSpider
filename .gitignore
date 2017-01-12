@@ -1,12 +1,8 @@
 # compiled files
 *.pyc
 
-# json data files
-courses_data.json
-*.jl
-
 # OS X file
 .DS_Store
-settings.pyc
-__init__.pyc
+
+# env
 /spiderenv
