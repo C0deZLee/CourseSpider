@@ -7,3 +7,6 @@ courses_data.json
 
 # OS X file
 .DS_Store
+settings.pyc
+__init__.pyc
+/spiderenv
